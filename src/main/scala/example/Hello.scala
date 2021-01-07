@@ -2,7 +2,8 @@ package example
 
 import java.sql.{Connection, DriverManager, ResultSet}
 
-object Hello extends App {
+
+object Postgres { // extends App  if you want to run this
   classOf[org.postgresql.Driver]
   val con_str = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres"
   val conn = DriverManager.getConnection(con_str)
