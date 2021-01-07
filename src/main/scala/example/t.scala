@@ -1,6 +1,10 @@
+/*
+  - change api to work with todos
+*/
 object t {
   val usage = """
     Usage: mmlaln [--min-size num] [--max-size num] filename
+    Usage: t add String
   """
   def main(args: Array[String]) {
     if (args.length == 0) println(usage)
@@ -11,6 +15,10 @@ object t {
       def isSwitch(s: String) = (s(0) == '-')
       list match {
         case Nil => map
+        case "add" :: value :: tail => {
+            println(s"adding value $value")
+            return map
+        }
         case "--max-size" :: value :: tail => {
           nextOption(map ++ Map('maxsize -> value.toInt), tail)
         }
