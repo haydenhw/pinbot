@@ -11,20 +11,17 @@ object t {
     val arglist = args.toList
     type OptionMap = Map[Symbol, Any]
 
-    def nextOption(map: OptionMap, list: List[String]): OptionMap = {
-      def isSwitch(s: String) = (s(0) == '-')
+    def nextOption(list: List[String]): Unit = {
       list match {
-        case Nil => map
+        case Nil => { println("Nil value found")}
         case "add" :: value :: tail => {
             println(s"adding value $value")
-            return map
         }
         case option :: tail =>
           println("Unknown option " + option)
           sys.exit(1)
       }
     }
-    val options = nextOption(Map(), arglist)
-    println(options)
+    nextOption(arglist)
   }
 }
