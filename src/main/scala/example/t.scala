@@ -1,11 +1,25 @@
 /*
-  - change api to work with todos
-*/
+  add:
+    - list todos
+      print todos want "1 - wash dishes"
+    - run command ali add "new todo"
+    - add todo to database using dao
+       what info does
+
+ */
 
 object api {
-  var todos = seq[String]();
-  def addTodo(todo: String): Unit = {
+  val exampleTodos = Seq("foo", "bar", "bing", "bang")
+  var todos = Seq[String]() ++ exampleTodos;
 
+  def addTodo(todo: String): Unit = {
+    todos = todos :+ todo
+    println(todo)
+    println(todos)
+  }
+
+  def listTodos: void = {
+    todos.foreach(println)
   }
 }
 
@@ -21,10 +35,10 @@ object t {
 
     def nextOption(list: List[String]): Unit = {
       list match {
-        case Nil => { println("Nil value found")}
+        case Nil => { println("Nil value found") }
         case "add" :: value :: tail => {
-            println(s"adding value $value")
-            // api.addTodo(value)
+          println(s"adding value $value")
+          api.addTodo(value)
         }
         case option :: tail =>
           println("Unknown option " + option)
