@@ -7,6 +7,20 @@
        what info does
 
  */
+object ids {
+  var idCount = 0
+
+  def generate() : Int = {
+    idCount += 1
+    return idCount
+  };
+} 
+
+case class Todo(name: String, id: Int) {
+  def printTodo: Unit = {
+    println(s"$id - $name")
+  }
+}
 
 object api {
   val exampleTodos = Seq("foo", "bar", "bing", "bang")
@@ -18,8 +32,11 @@ object api {
     println(todos)
   }
 
-  def listTodos: void = {
-    todos.foreach(println)
+  def listTodos: Unit = {
+    var count = 0
+    val todoObjs = todos.map(t => new Todo(t, ids.generate))
+
+    todoObjs.foreach(_.printTodo)
   }
 }
 
@@ -39,6 +56,9 @@ object t {
         case "add" :: value :: tail => {
           println(s"adding value $value")
           api.addTodo(value)
+        }
+        case "list" :: tail => {
+          api.listTodos
         }
         case option :: tail =>
           println("Unknown option " + option)
