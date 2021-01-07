@@ -19,15 +19,6 @@ object t {
             println(s"adding value $value")
             return map
         }
-        case "--max-size" :: value :: tail => {
-          nextOption(map ++ Map('maxsize -> value.toInt), tail)
-        }
-        case "--min-size" :: value :: tail =>
-          nextOption(map ++ Map('minsize -> value.toInt), tail)
-        case string :: opt2 :: tail if isSwitch(opt2) =>
-          nextOption(map ++ Map('infile -> string), list.tail)
-        case string :: Nil =>
-          nextOption(map ++ Map('infile -> string), list.tail)
         case option :: tail =>
           println("Unknown option " + option)
           sys.exit(1)
