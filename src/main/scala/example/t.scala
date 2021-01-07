@@ -1,6 +1,14 @@
 /*
   - change api to work with todos
 */
+
+object api {
+  var todos = seq[String]();
+  def addTodo(todo: String): Unit = {
+
+  }
+}
+
 object t {
   val usage = """
     Usage: mmlaln [--min-size num] [--max-size num] filename
@@ -16,6 +24,7 @@ object t {
         case Nil => { println("Nil value found")}
         case "add" :: value :: tail => {
             println(s"adding value $value")
+            // api.addTodo(value)
         }
         case option :: tail =>
           println("Unknown option " + option)
