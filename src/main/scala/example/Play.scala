@@ -1,14 +1,7 @@
+import scala.collection.mutable.ArrayBuffer
 
-import scala.io.StdIn.readLine
 
 object Play extends App {
-
-    print("Enter your first name: ")
-    val firstName = readLine()
-
-    print("Enter your last name: ")
-    val lastName = readLine()
-
-    println(s"Your name is $firstName $lastName")
-
+    val arr = new ArrayBuffer[String]()
+    println("fdsa")
 }

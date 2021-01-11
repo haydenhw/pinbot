@@ -4,7 +4,7 @@ import java.sql.{Connection, DriverManager, ResultSet}
 
 
 object Postgres { // extends App  if you want to run this
-  classOf[org.postgresql.Driver]
+  // classOf[org.postgresql.Driver]
   val con_str = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres"
   val conn = DriverManager.getConnection(con_str)
   try {
@@ -13,7 +13,7 @@ object Postgres { // extends App  if you want to run this
     val rs = stm.executeQuery("SELECT * from todos")
 
     while(rs.next) {
-      println(rs.getString("text"))
+      println(rs.getString("text") + "fdsa")
     }
  } finally {
      conn.close()
