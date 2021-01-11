@@ -7,14 +7,15 @@
        what info does
 
  */
+/*
 object ids {
   var idCount = 0
 
-  def generate() : Int = {
+  def generate(): Int = {
     idCount += 1
     return idCount
   };
-} 
+}
 
 case class Todo(name: String, id: Int) {
   def printTodo: Unit = {
@@ -22,7 +23,7 @@ case class Todo(name: String, id: Int) {
   }
 }
 
-object api {
+object api { // extends App
   val exampleTodos = Seq("foo", "bar", "bing", "bang")
   var todos = Seq[String]() ++ exampleTodos;
 
@@ -45,26 +46,25 @@ object t {
     Usage: mmlaln [--min-size num] [--max-size num] filename
     Usage: t add String
   """
-  def main(args: Array[String]) {
-    if (args.length == 0) println(usage)
-    val arglist = args.toList
-    type OptionMap = Map[Symbol, Any]
+  if (args.length == 0) println(usage)
+  val arglist = args.toList
+  type OptionMap = Map[Symbol, Any]
 
-    def nextOption(list: List[String]): Unit = {
-      list match {
-        case Nil => { println("Nil value found") }
-        case "add" :: value :: tail => {
-          println(s"adding value $value")
-          api.addTodo(value)
-        }
-        case "list" :: tail => {
-          api.listTodos
-        }
-        case option :: tail =>
-          println("Unknown option " + option)
-          sys.exit(1)
+  def nextOption(list: List[String]): Unit = {
+    list match {
+      case Nil => { println("Nil value found") }
+      case "add" :: value :: tail => {
+        println(s"adding value $value")
+        api.addTodo(value)
       }
+      case "list" :: tail => {
+        api.listTodos
+      }
+      case option :: tail =>
+        println("Unknown option " + option)
+        sys.exit(1)
     }
-    nextOption(arglist)
   }
+  nextOption(arglist)
 }
+*/
