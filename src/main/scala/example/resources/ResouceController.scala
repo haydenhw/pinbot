@@ -12,7 +12,8 @@ object ResouceController {
       // TODO validate name and url
       val name = r(0)
       val url = r(1)
-      val success = ResourceDAO.add(new Resource(name, url))
+
+      val success = ResourceDAO.add(name, url)
 
       if (success)
         println(s"Resource add successfully $name $url")
@@ -31,13 +32,25 @@ object ResouceController {
 
   def add(name: String, url: String): Unit = {
     // TODO validate name and url
-    val resource = new Resource(name, url)
-
-    val success = ResourceDAO.add(resource)
+    val success = ResourceDAO.add(name, url)
 
     if (success)
       println(s"Resource add successfully $name $url")
     else
       println(s"Failed to add resource $name $url")
+  }
+
+  def update(name: Option[String], url: Option[String]) = {
+    val resource = ResourceDAO.findById(3);
+
+    val nextResource =
+      (name, url) match {
+        case (Some(name), Some(url)) => resource.copy(name = name, url = url)
+        case (Some(name), None) => resource.copy(name = name)
+        case (None, Some(url)) => resource.copy(url = url)
+        case (None, None) => resource
+      }
+    
+    println(nextResource)
   }
 }

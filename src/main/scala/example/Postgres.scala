@@ -13,7 +13,7 @@ object Postgres { // extends App  if you want to run this
     val rs = stm.executeQuery("SELECT * from todos")
 
     while(rs.next) {
-      println(rs.getString("text") + "fdsa")
+      println(rs.getString("name"))
     }
  } finally {
      conn.close()

@@ -10,8 +10,12 @@ object ResourceDAO {
     CSV.toListOfLists(fh)
   }
 
-  def add(resource: Resource): Boolean = {
-    println(s"DAO SAYS: RESOURCE ADDED -> $resource")
+  def add(name: String, url: String): Boolean = {
+    println(s"DAO SAYS: RESOURCE ADDED -> $name $url")
     true
+  }
+
+  def findById(id: Int) : Resource = {
+    Resource("fdsa", "http://coolurl bruh")
   }
 }
