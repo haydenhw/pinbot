@@ -3,7 +3,7 @@ package example.services
 import scala.collection.mutable.ArrayBuffer
 
 object CSV {
-  def toListOfArrays(filehandle: String): List[List[String]] = {
+  def toListOfLists(filehandle: String): List[List[String]] = {
     // TODO support file handles with relative paths
     val bufferedSource = io.Source.fromFile(filehandle)
     val rows = ArrayBuffer[List[String]]()
