@@ -1,6 +1,6 @@
 package example.resources
 
-case class ResourceModel( 
+case class Resource( 
     name: String,
     url: String,
     status: Option[Int] = None,

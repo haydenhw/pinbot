@@ -1,5 +1,7 @@
 package example
 import example.services.CSV
+import example.resources.Resource
+
 
 object ResourceDAO {
   def list: List[List[String]] = {
@@ -8,4 +10,8 @@ object ResourceDAO {
     CSV.toListOfArrays(fh)
   }
 
+  def add(resource: Resource): Boolean = {
+    println(s"DAO SAYS: RESOURCE ADDED -> $resource")
+    true
+  }
 }
