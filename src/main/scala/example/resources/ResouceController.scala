@@ -24,7 +24,7 @@ object ResouceController {
   }
 
   def list: Unit = {
-    val heading = List(List("NAME", "URL"))
+    val heading = List(List("ID", "STATE", "NAME", "CODE", "DATE-TIME", "URL"))
     val resources = ResourceDAO.list
     val table = Tabulator.format(heading ++ resources)
     println(table)
