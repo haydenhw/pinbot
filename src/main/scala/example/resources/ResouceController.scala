@@ -10,9 +10,7 @@ object ResouceController {
     val resourcesList = CSV.toListOfLists(filehandle)
     resourcesList.foreach(r => {
       // TODO validate name and url
-      val name = r(0)
-      val url = r(1)
-
+      val name :: url :: Nil = r
       val success = ResourceDAO.add(name, url)
 
       if (success)
@@ -40,11 +38,46 @@ object ResouceController {
       println(s"Failed to add resource $name $url")
   }
 
-  def update(name: Option[String], url: Option[String]): Unit = {
-      var nextResource = ResourceDAO.findById(3);
-      if (name.isDefined) nextResource = nextResource.copy(name = name.get)
-      if (url.isDefined) nextResource =  nextResource.copy(url = url.get)
+  def update(
+      id: String,
+      name: Option[String],
+      url: Option[String]
+  ): Unit = {
+    // TODO validate params
+    var nextResource = ResourceDAO.findById(id.toInt);
+    if (name.isDefined) nextResource = nextResource.copy(name = name.get)
+    if (url.isDefined) nextResource = nextResource.copy(url = url.get)
 
-      println(nextResource)
+    val success = ResourceDAO.update(nextResource)
+
+    if (success)
+      println("Resouce updated successfully")
+    else
+      println("Failed to update resource")
+
+  }
+
+  def update(
+      id: String,
+      name: Option[String],
+      url: Option[String],
+      status: Option[String],
+      timeLastPinged: Option[String]
+  ): Unit = {
+    // TODO validate params
+    var nextResource = ResourceDAO.findById(id.toInt);
+    if (name.isDefined) nextResource = nextResource.copy(name = name.get)
+    if (url.isDefined) nextResource = nextResource.copy(url = url.get)
+    if (status.isDefined) nextResource = nextResource.copy(status = status)
+    if (status.isDefined)
+      nextResource = nextResource.copy(timeLastPinged = timeLastPinged)
+
+    val success = ResourceDAO.update(nextResource)
+
+    if (success)
+      println("Resouce updated successfully")
+    else
+      println("Failed to update resource")
+
   }
 }
