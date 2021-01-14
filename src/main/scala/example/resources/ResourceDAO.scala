@@ -62,18 +62,17 @@ object ResourceDAO {
 
       stm.setString(1, resource.name)
       stm.setString(2, resource.url)
-
-      if (resource.status.isDefined)
-        stm.setString(3, resource.status.get)
-      else
-        stm.setNull(3, Types.VARCHAR)
-
-      if (resource.status.isDefined)
-        stm.setString(4, resource.timeLastPinged.get)
-      else
-        stm.setNull(4, Types.VARCHAR)
-
       stm.setInt(5, resource.id)
+
+      resource.status match {
+        case Some(_) => stm.setString(3, resource.status.get)
+        case None    => stm.setNull(3, Types.VARCHAR)
+      }
+
+      resource.timeLastPinged match {
+        case Some(_) => stm.setString(4, resource.timeLastPinged.get)
+        case None    => stm.setNull(4, Types.VARCHAR)
+      }
 
       if (stm.executeUpdate() != 0) true else false
     } finally {
