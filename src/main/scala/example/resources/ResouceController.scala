@@ -8,17 +8,12 @@ import example.services.CSV
 object ResouceController {
   def importCSV(filehandle: String) = {
     val resourcesList = CSV.toListOfLists(filehandle)
-    resourcesList.foreach(r => {
-      // TODO validate name and url
-      val name :: url :: Nil = r
-      val success = ResourceDAO.add(name, url)
+    val success = ResourceDAO.add(resourcesList)
 
-      if (success)
-        println(s"Resource add successfully $name $url")
-      else
-        println(s"Failed to add resource $name $url")
-    })
-
+    if (success)
+      println("Resource imported successfully")
+    else
+      println("Failed to import resources")
   }
 
   def list: Unit = {
@@ -30,7 +25,7 @@ object ResouceController {
 
   def add(name: String, url: String): Unit = {
     // TODO validate name and url
-    val success = ResourceDAO.add(name, url)
+    val success = ResourceDAO.add(List(List(name, url)))
 
     if (success)
       println(s"Resource add successfully $name $url")
@@ -54,7 +49,6 @@ object ResouceController {
       println("Resouce updated successfully")
     else
       println("Failed to update resource")
-
   }
 
   def update(
@@ -78,6 +72,5 @@ object ResouceController {
       println("Resouce updated successfully")
     else
       println("Failed to update resource")
-
   }
 }

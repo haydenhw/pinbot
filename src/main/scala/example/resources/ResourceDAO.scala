@@ -7,12 +7,13 @@ import scala.collection.mutable.ArrayBuffer
 
 object ResourceDAO {
   // TODO set this with an environment variable
-  val con_str =
+  classOf[org.postgresql.Driver].newInstance()
+  val conStr =
     "jdbc:postgresql://localhost:5432/pingbot?user=postgres&password=postgres"
 
   def list: List[List[String]] = {
     // TODO make a connection utility
-    val conn = DriverManager.getConnection(con_str)
+    val conn = DriverManager.getConnection(conStr)
     val resources = ArrayBuffer[List[String]]()
     try {
       val stm = conn.createStatement()
@@ -47,13 +48,31 @@ object ResourceDAO {
     resources.toList
   }
 
-  def add(name: String, url: String): Boolean = {
-    println(s"DAO SAYS: RESOURCE ADDED -> $name $url")
-    true
+  def add(resources: List[List[String]]): Boolean = {
+      val conn = DriverManager.getConnection(conStr)
+      try {
+      // TODO make a connection utility
+      val sql = "INSERT INTO resources (name, url) VALUES (?, ?)"
+      val stm = conn.prepareStatement(sql)
+      conn.setAutoCommit(false)
+
+      resources.foreach(r => {
+        val name :: url :: Nil = r
+        stm.setString(1, name)
+        stm.setString(2, url)
+        stm.executeUpdate()
+        conn.commit()
+      })
+
+      if (stm.executeUpdate() != 0) true else false
+      } finally{
+        conn.close()
+      }
+    
   }
 
   def update(resource: Resource): Boolean = {
-    val conn = DriverManager.getConnection(con_str)
+    val conn = DriverManager.getConnection(conStr)
 
     try {
       val sql =
@@ -83,7 +102,7 @@ object ResourceDAO {
 
   def findById(id: Int): Resource = {
     // TODO make a connection utility
-    val conn = DriverManager.getConnection(con_str)
+    val conn = DriverManager.getConnection(conStr)
 
     try {
       val sql = "SELECT * FROM resources WHERE id=?"
