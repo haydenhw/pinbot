@@ -4,6 +4,7 @@ import example.resources.ResouceController
 
 object CLI {
   def parseArgs(args: Array[String]): Unit = {
+    // TODO add more docstring examples
     val docString = """
     Commands: import, add, update, list
 
@@ -16,10 +17,10 @@ object CLI {
 
     def nextOption(list: List[String]): Unit = {
       list match {
-        case Nil             => println(docString) // TODO print a doc string
+        case Nil             => println(docString)
         case "start" :: tail => println("Starting loop")
         // list
-        case "list" :: tail => { ResouceController.list }
+        case "list" :: tail =>  ResouceController.tabulate 
         // import
         case "import" :: filehandle :: tail =>
           ResouceController.importCSV(filehandle)

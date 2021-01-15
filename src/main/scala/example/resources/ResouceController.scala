@@ -16,10 +16,10 @@ object ResouceController {
       println("Failed to import resources")
   }
 
-  def list: Unit = {
+  def tabulate: Unit = { // rename this to tabulate
+    val resourcesList = ResourceDAO.list.map(_.toTableRow())
     val heading = List(List("ID", "STATE", "NAME", "CODE", "DATE-TIME", "URL"))
-    val resources = ResourceDAO.list
-    val table = Tabulator.format(heading ++ resources)
+    val table = Tabulator.format(heading ++ resourcesList)
     println(table)
   }
 
