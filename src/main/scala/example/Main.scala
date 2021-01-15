@@ -3,9 +3,10 @@ import example.resources._
 import example.CLI
 
 object Main extends App {
-  println("=" * 40)
+  print("\u001b[2J") // clear screen
+  println("=" * 100)
   // code here
   CLI.parseArgs(args)
   // end code here
-  println("=" * 40)
+  println("=" * 100 + "\n" * 3)
 }
