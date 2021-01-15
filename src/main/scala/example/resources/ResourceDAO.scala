@@ -11,34 +11,33 @@ object ResourceDAO {
   val conStr =
     "jdbc:postgresql://localhost:5432/pingbot?user=postgres&password=postgres"
 
-  def list: List[List[String]] = {
+  def list: List[Resource] = {
     // TODO make a connection utility
     val conn = DriverManager.getConnection(conStr)
-    val resources = ArrayBuffer[List[String]]()
+    val resources = ArrayBuffer[Resource]()
     try {
       val stm = conn.createStatement()
       val rs = stm.executeQuery("SELECT * from resources")
 
       while (rs.next) {
-        val id = (rs.getInt("id")).toString()
+        // TODO define a method on Resources model to create an instance from a result set
+        val id = (rs.getInt("id"))
         val name = rs.getString("name")
         val url = rs.getString("url")
 
-        var status = rs.getString("status")
-        status = if (rs.wasNull()) "-" else status
+        val maybeStatus = rs.getString("status")
+        val status = if (rs.wasNull()) None else Some(maybeStatus) 
 
-        var timeLastPinged = rs.getString("time_last_pinged")
-        timeLastPinged = if (rs.wasNull()) "-" else timeLastPinged
+        val maybeTimeLastPinged = rs.getString("time_last_pinged")
+        val timeLastPinged = if (rs.wasNull()) None else Some(maybeTimeLastPinged)
 
-        // 200-299 status codes will be considered 'UP'
-        // Anything else will be considered 'DOWN'
-        val state = status.charAt(0) match {
-          case '2' => "UP"
-          case '-' => "-"
-          case _   => "DOWN"
-        }
-
-        resources += List(id, state, name, status, timeLastPinged, url)
+        resources += Resource(
+          id = id,
+          name = name,
+          url = url,
+          status = status,
+          timeLastPinged = timeLastPinged
+        )
       }
 
     } finally {
