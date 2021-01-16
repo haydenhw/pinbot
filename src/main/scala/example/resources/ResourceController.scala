@@ -5,7 +5,7 @@ import example.resources.Resource
 import example.services.Tabulator
 import example.services.CSV
 
-object ResouceController {
+object ResourceController {
   def importCSV(filehandle: String) = {
     val resourcesList = CSV.toListOfLists(filehandle)
     val success = ResourceDAO.add(resourcesList)
@@ -16,8 +16,8 @@ object ResouceController {
       println("Failed to import resources")
   }
 
-  def tabulate: Unit = { // rename this to tabulate
-    val resourcesList = ResourceDAO.list.map(_.toTableRow())
+  def tabulate: Unit = {
+    val resourcesList = ResourceDAO.findAll.map(_.toTableRow())
     val heading = List(List("ID", "STATE", "NAME", "CODE", "DATE-TIME", "URL"))
     val table = Tabulator.format(heading ++ resourcesList)
     println(table)
@@ -33,6 +33,10 @@ object ResouceController {
       println(s"Failed to add resource $name $url")
   }
 
+  def findAll: List[Resource] = {
+    ResourceDAO.findAll
+  }
+
   def update(
       id: String,
       name: Option[String],
@@ -46,30 +50,24 @@ object ResouceController {
     val success = ResourceDAO.update(nextResource)
 
     if (success)
-      println("Resouce updated successfully")
+      println("Resource updated successfully")
     else
       println("Failed to update resource")
   }
 
-  def update(
-      id: String,
-      name: Option[String],
-      url: Option[String],
-      status: Option[String],
-      timeLastPinged: Option[String]
+  def updateStatus(
+      id: Int,
+      status: String,
+      timeLastPinged: String
   ): Unit = {
     // TODO validate params
-    var nextResource = ResourceDAO.findById(id.toInt);
-    if (name.isDefined) nextResource = nextResource.copy(name = name.get)
-    if (url.isDefined) nextResource = nextResource.copy(url = url.get)
-    if (status.isDefined) nextResource = nextResource.copy(status = status)
-    if (status.isDefined)
-      nextResource = nextResource.copy(timeLastPinged = timeLastPinged)
-
-    val success = ResourceDAO.update(nextResource)
+    val resource = ResourceDAO.findById(id);
+    val success = ResourceDAO.update(
+      resource.copy(status = Some(status), timeLastPinged = Some(timeLastPinged))
+    )
 
     if (success)
-      println("Resouce updated successfully")
+      println("Resource updated successfully")
     else
       println("Failed to update resource")
   }

@@ -11,7 +11,7 @@ object ResourceDAO {
   val conStr =
     "jdbc:postgresql://localhost:5432/pingbot?user=postgres&password=postgres"
 
-  def list: List[Resource] = {
+  def findAll: List[Resource] = {
     // TODO make a connection utility
     val conn = DriverManager.getConnection(conStr)
     val resources = ArrayBuffer[Resource]()

@@ -1,38 +1,47 @@
 package example
+
 import example.services.Api
-
-object fetchAsycn {
-  // def  creates a new thread that will call api with given param
-  def makeThread(url: String) : Thread = {
-    new Thread {
-      override def run {
-        Api.getStatusCode(url)
-      }
-    }
-  }
-
-}
+import example.resources.ResourceController
+import example.resources.Resource
 
 object Monitor {
   def init: Unit = {
     val t = new java.util.Timer()
-    var count = 0
-    val task = new java.util.TimerTask {
-      def run() = { count += 1; println(count) }
+    val fetchStatus = new java.util.TimerTask {
+      def run() = {
+        ResourceController.findAll.foreach(fetchStatusAndUpdateAsycn)
+      }
     }
-    t.schedule(task, 0, 1000L)
+    t.schedule(fetchStatus, 0, 1000L)
     println("Resource monitoring initated...")
   }
 
-  private def pingResrouces: Unit = {
-    // get resources from controller
-    // loop over resoures
-    // call fetchStatusAndUpdate
+  private def fetchStatusAndUpdateAsycn(resource: Resource): Unit = {
+    val thread = new Thread {
+      override def run {
+        fetchStatusAndUpdate(resource)
+      }
+    }
+
+    thread.start
   }
 
-  private def fetchStatusAndUpdate(url: String): Unit = {
-    // create a thread
-    // inside the thread use url to call api then update the database with the result
-
+  private def fetchStatusAndUpdate(resource: Resource): Unit = {
+    val datetimeNow = java.time.LocalDateTime.now().toString
+    try {
+      val status = Api.getStatusCode(resource.url)
+      ResourceController.updateStatus(
+        resource.id,
+        status,
+        datetimeNow
+      )
+    } catch {
+      case e: Exception =>
+        ResourceController.updateStatus(
+          resource.id,
+          "Unreachable",
+          datetimeNow
+        )
+    }
   }
 }
