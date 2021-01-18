@@ -26,10 +26,11 @@ object ResourceDAO {
         val url = rs.getString("url")
 
         val maybeStatus = rs.getString("status")
-        val status = if (rs.wasNull()) None else Some(maybeStatus) 
+        val status = if (rs.wasNull()) None else Some(maybeStatus)
 
         val maybeTimeLastPinged = rs.getString("time_last_pinged")
-        val timeLastPinged = if (rs.wasNull()) None else Some(maybeTimeLastPinged)
+        val timeLastPinged =
+          if (rs.wasNull()) None else Some(maybeTimeLastPinged)
 
         resources += Resource(
           id = id,
@@ -45,58 +46,6 @@ object ResourceDAO {
     }
 
     resources.toList
-  }
-
-  def add(resources: List[List[String]]): Boolean = {
-      val conn = DriverManager.getConnection(conStr)
-      try {
-      // TODO make a connection utility
-      val sql = "INSERT INTO resources (name, url) VALUES (?, ?)"
-      val stm = conn.prepareStatement(sql)
-      conn.setAutoCommit(false)
-
-      resources.foreach(r => {
-        val name :: url :: Nil = r
-        stm.setString(1, name)
-        stm.setString(2, url)
-        stm.executeUpdate()
-        conn.commit()
-      })
-
-      if (stm.executeUpdate() != 0) true else false
-      } finally{
-        conn.close()
-      }
-    
-  }
-
-  def update(resource: Resource): Boolean = {
-    val conn = DriverManager.getConnection(conStr)
-
-    try {
-      val sql =
-        "UPDATE resources SET name=?, url=?, status=?, time_last_pinged=? WHERE id=?"
-      val stm = conn.prepareStatement(sql)
-
-      stm.setString(1, resource.name)
-      stm.setString(2, resource.url)
-      stm.setInt(5, resource.id)
-
-      resource.status match {
-        case Some(_) => stm.setString(3, resource.status.get)
-        case None    => stm.setNull(3, Types.VARCHAR)
-      }
-
-      resource.timeLastPinged match {
-        case Some(_) => stm.setString(4, resource.timeLastPinged.get)
-        case None    => stm.setNull(4, Types.VARCHAR)
-      }
-
-      if (stm.executeUpdate() != 0) true else false
-    } finally {
-      conn.close()
-    }
-
   }
 
   def findById(id: Int): Resource = {
@@ -131,6 +80,71 @@ object ResourceDAO {
         // TODO change this to a better exception type
         throw new Exception(s"Resource with id=$id not found!")
       }
+    } finally {
+      conn.close()
+    }
+  }
+
+  def add(resources: List[List[String]]): Boolean = {
+    val conn = DriverManager.getConnection(conStr)
+    try {
+      // TODO make a connection utility
+      val sql = "INSERT INTO resources (name, url) VALUES (?, ?)"
+      val stm = conn.prepareStatement(sql)
+      conn.setAutoCommit(false)
+
+      resources.foreach(r => {
+        val name :: url :: Nil = r
+        stm.setString(1, name)
+        stm.setString(2, url)
+        stm.executeUpdate()
+        conn.commit()
+      })
+
+      stm.executeUpdate() != 0
+    } finally {
+      conn.close()
+    }
+
+  }
+
+  def update(resource: Resource): Boolean = {
+    val conn = DriverManager.getConnection(conStr)
+
+    try {
+      val sql =
+        "UPDATE resources SET name=?, url=?, status=?, time_last_pinged=? WHERE id=?"
+      val stm = conn.prepareStatement(sql)
+
+      stm.setString(1, resource.name)
+      stm.setString(2, resource.url)
+      stm.setInt(5, resource.id)
+
+      resource.status match {
+        case Some(_) => stm.setString(3, resource.status.get)
+        case None    => stm.setNull(3, Types.VARCHAR)
+      }
+
+      resource.timeLastPinged match {
+        case Some(_) => stm.setString(4, resource.timeLastPinged.get)
+        case None    => stm.setNull(4, Types.VARCHAR)
+      }
+
+      stm.executeUpdate() != 0
+    } finally {
+      conn.close()
+    }
+  }
+
+  def deleteById(id: Int): Boolean = {
+    val conn = DriverManager.getConnection(conStr)
+    try {
+    val sql = "DELETE from resources WHERE id=?"
+    val stm = conn.prepareStatement(sql)
+
+    stm.setInt(1, id)
+
+    stm.executeUpdate() != 0
     } finally {
       conn.close()
     }

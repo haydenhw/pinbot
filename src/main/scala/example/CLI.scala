@@ -17,9 +17,9 @@ object CLI {
 
     def nextOption(list: List[String]): Unit = {
       list match {
-        case Nil             => println(docString)
+        case Nil               => println(docString)
         case "monitor" :: tail => Monitor.init
-        case "list" :: tail  => ResourceController.tabulate
+        case "list" :: tail    => ResourceController.tabulate
         case "import" :: filehandle :: tail =>
           ResourceController.importCSV(filehandle)
         case "import" :: tail =>
@@ -29,6 +29,9 @@ object CLI {
           ResourceController.add(name, url)
         case "add" :: tail =>
           println("ERROR: name and url are required");
+        case "delete" :: "--id" :: id :: tail =>
+          ResourceController.deleteById(id)
+        case "delete" :: tail => println("ERROR: please include the 'id' of the resource you want to delete")
         case "update" :: "--id" :: id :: "--name" :: name :: "--url" :: url :: tail =>
           ResourceController.update(id, Some(name), Some(url))
         case "update" :: "--id" :: id :: "--url" :: url :: "--name" :: name :: tail =>

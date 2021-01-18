@@ -66,9 +66,15 @@ object ResourceController {
       resource.copy(status = Some(status), timeLastPinged = Some(timeLastPinged))
     )
 
+    if (!success)
+      println(s"Failed to update resource: $resource.name")
+  }
+
+  def deleteById(id: String) {
+    val found = ResourceDAO.findById(id.toInt)
+    val success = ResourceDAO.deleteById(found.id)
+
     if (success)
-      println("Resource updated successfully")
-    else
-      println("Failed to update resource")
+      println("Resource deleted successfully")
   }
 }
