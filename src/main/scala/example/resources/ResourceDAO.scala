@@ -17,7 +17,7 @@ object ResourceDAO {
     val resources = ArrayBuffer[Resource]()
     try {
       val stm = conn.createStatement()
-      val rs = stm.executeQuery("SELECT * from resources")
+      val rs = stm.executeQuery("SELECT * from resources ORDER BY id ASC")
 
       while (rs.next) {
         // TODO define a method on Resources model to create an instance from a result set

@@ -18,7 +18,7 @@ object ResourceController {
 
   def tabulate: Unit = {
     val resourcesList = ResourceDAO.findAll.map(_.toTableRow())
-    val heading = List(List("ID", "STATE", "NAME", "CODE", "DATE-TIME", "URL"))
+    val heading = List(List("ID", "STATE", "NAME", "RESPONSE", "DATE-TIME", "URL"))
     val table = Tabulator.format(heading ++ resourcesList)
     println(table)
   }

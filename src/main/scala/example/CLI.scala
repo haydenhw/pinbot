@@ -24,7 +24,6 @@ object CLI {
           ResourceController.importCSV(filehandle)
         case "import" :: tail =>
           println("ERROR: file path to a valid .csv file is required");
-          sys.exit(1)
         case "add" :: "--name" :: name :: "--url" :: url :: tail =>
           ResourceController.add(name, url)
         case "add" :: tail =>

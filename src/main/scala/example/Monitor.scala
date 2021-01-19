@@ -39,7 +39,7 @@ object Monitor {
       case e: Exception =>
         ResourceController.updateStatus(
           resource.id,
-          "Unreachable",
+          "Connection Refused",
           datetimeNow
         )
     }
